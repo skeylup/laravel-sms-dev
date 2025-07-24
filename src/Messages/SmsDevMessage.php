@@ -5,6 +5,7 @@ namespace Skeylup\LaravelSmsDev\Messages;
 class SmsDevMessage
 {
     public string $content;
+
     public ?string $from = null;
 
     public function __construct(string $content = '')

@@ -2,10 +2,10 @@
 
 namespace Skeylup\LaravelSmsDev\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Skeylup\LaravelSmsDev\Models\SmsLog;
 use Skeylup\LaravelSmsDev\Notifications\TestSmsNotification;
-use App\Models\User;
 
 class LaravelSmsDevCommand extends Command
 {
@@ -59,7 +59,7 @@ class LaravelSmsDevCommand extends Command
             $this->line('');
             $this->info("Latest SMS: {$latest->created_at->diffForHumans()}");
             $this->line("Recipient: {$latest->to}");
-            $this->line("Message: " . substr($latest->message, 0, 50) . '...');
+            $this->line('Message: '.substr($latest->message, 0, 50).'...');
         }
 
         return self::SUCCESS;
@@ -72,21 +72,27 @@ class LaravelSmsDevCommand extends Command
         // Créer un utilisateur fictif ou utiliser un existant
         if ($userId = $this->option('user')) {
             $user = User::find($userId);
-            if (!$user) {
+            if (! $user) {
                 $this->error("Utilisateur avec l'ID {$userId} introuvable.");
+
                 return self::FAILURE;
             }
         } else {
             // Créer un objet anonyme avec un numéro de téléphone
             $phone = $this->option('phone') ?? '+33123456789';
-            $user = new class($phone) {
+            $user = new class($phone)
+            {
                 use \Illuminate\Notifications\Notifiable;
 
                 public function __construct(public string $phone) {}
 
-                public function getKey() { return 'test'; }
+                public function getKey()
+                {
+                    return 'test';
+                }
 
-                public function routeNotificationForSms() {
+                public function routeNotificationForSms()
+                {
                     return $this->phone;
                 }
             };
@@ -97,10 +103,11 @@ class LaravelSmsDevCommand extends Command
         try {
             $user->notify(new TestSmsNotification($message));
             $this->info('✅ SMS de test envoyé avec succès!');
-            $this->line("Destinataire: " . ($this->option('phone') ?? '+33123456789'));
+            $this->line('Destinataire: '.($this->option('phone') ?? '+33123456789'));
             $this->line("Message: {$message}");
         } catch (\Exception $e) {
-            $this->error("❌ Erreur lors de l'envoi: " . $e->getMessage());
+            $this->error("❌ Erreur lors de l'envoi: ".$e->getMessage());
+
             return self::FAILURE;
         }
 
@@ -116,6 +123,7 @@ class LaravelSmsDevCommand extends Command
 
         if ($count === 0) {
             $this->info('Aucun SMS à nettoyer.');
+
             return self::SUCCESS;
         }
 
@@ -135,6 +143,7 @@ class LaravelSmsDevCommand extends Command
 
         if ($count === 0) {
             $this->info('Aucun SMS à supprimer.');
+
             return self::SUCCESS;
         }
 

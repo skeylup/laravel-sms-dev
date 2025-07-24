@@ -3,8 +3,8 @@
 namespace Skeylup\LaravelSmsDev\Channels;
 
 use Illuminate\Notifications\Notification;
-use Skeylup\LaravelSmsDev\Models\SmsLog;
 use Skeylup\LaravelSmsDev\Messages\SmsDevMessage;
+use Skeylup\LaravelSmsDev\Models\SmsLog;
 
 class SmsDevChannel
 {
@@ -15,16 +15,16 @@ class SmsDevChannel
     {
         // Récupérer le message SMS depuis la notification
         $message = $notification->toSms($notifiable);
-        
+
         // Si ce n'est pas un SmsDevMessage, on essaie de le convertir
-        if (!$message instanceof SmsDevMessage) {
+        if (! $message instanceof SmsDevMessage) {
             $message = SmsDevMessage::create($message);
         }
 
         // Récupérer le numéro de téléphone du destinataire
         $to = $this->getTo($notifiable, $notification);
-        
-        if (!$to) {
+
+        if (! $to) {
             return; // Pas de numéro de téléphone, on ne peut pas envoyer
         }
 

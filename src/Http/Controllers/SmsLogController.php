@@ -2,8 +2,8 @@
 
 namespace Skeylup\LaravelSmsDev\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Skeylup\LaravelSmsDev\Models\SmsLog;
 
@@ -47,7 +47,7 @@ class SmsLogController
         }
 
         // Marquer comme lu automatiquement si sélectionné
-        if ($selectedSms && !$selectedSms->is_read) {
+        if ($selectedSms && ! $selectedSms->is_read) {
             $selectedSms->markAsRead();
         }
 
@@ -60,14 +60,12 @@ class SmsLogController
     public function show(SmsLog $smsLog): View
     {
         // Marquer comme lu automatiquement
-        if (!$smsLog->is_read) {
+        if (! $smsLog->is_read) {
             $smsLog->markAsRead();
         }
 
         return view('sms-dev::show', compact('smsLog'));
     }
-
-
 
     /**
      * Gérer les actions via paramètre GET
@@ -78,18 +76,21 @@ class SmsLogController
             case 'clear-all':
                 $count = SmsLog::count();
                 SmsLog::truncate();
+
                 return redirect()->route('sms-dev.index')
                     ->with('success', "All SMS messages have been deleted ({$count} total).");
 
             case 'mark-all-read':
                 $count = SmsLog::unread()->count();
                 SmsLog::unread()->update(['is_read' => true]);
+
                 return redirect()->route('sms-dev.index')
                     ->with('success', "{$count} SMS messages marked as read.");
 
             case 'delete-read':
                 $count = SmsLog::read()->count();
                 SmsLog::read()->delete();
+
                 return redirect()->route('sms-dev.index')
                     ->with('success', "{$count} read SMS messages have been deleted.");
 
@@ -98,10 +99,12 @@ class SmsLogController
                     $sms = SmsLog::find($request->get('id'));
                     if ($sms) {
                         $sms->delete();
+
                         return redirect()->route('sms-dev.index')
                             ->with('success', 'SMS message deleted successfully.');
                     }
                 }
+
                 return redirect()->route('sms-dev.index')
                     ->with('error', 'SMS message not found.');
 

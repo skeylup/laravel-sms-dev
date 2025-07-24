@@ -3,12 +3,11 @@
 namespace Skeylup\LaravelSmsDev;
 
 use Illuminate\Notifications\ChannelManager;
-use Illuminate\Support\Facades\Route;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Skeylup\LaravelSmsDev\Channels\SmsDevChannel;
 use Skeylup\LaravelSmsDev\Commands\LaravelSmsDevCommand;
 use Skeylup\LaravelSmsDev\Http\Middleware\Authorize;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LaravelSmsDevServiceProvider extends PackageServiceProvider
 {
@@ -32,7 +31,7 @@ class LaravelSmsDevServiceProvider extends PackageServiceProvider
     {
         // Register SMS Dev notification channel
         $this->app->make(ChannelManager::class)->extend('sms-dev', function () {
-            return new SmsDevChannel();
+            return new SmsDevChannel;
         });
 
         // Register middleware

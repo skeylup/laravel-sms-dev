@@ -2,9 +2,9 @@
 
 namespace Skeylup\LaravelSmsDev\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class SmsLog extends Model
 {
@@ -79,8 +79,8 @@ class SmsLog extends Model
      */
     public function getMessagePreviewAttribute(): string
     {
-        return strlen($this->message) > 50 
-            ? substr($this->message, 0, 50) . '...' 
+        return strlen($this->message) > 50
+            ? substr($this->message, 0, 50).'...'
             : $this->message;
     }
 }

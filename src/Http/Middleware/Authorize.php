@@ -4,7 +4,6 @@ namespace Skeylup\LaravelSmsDev\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -16,12 +15,12 @@ class Authorize
     public function handle(Request $request, Closure $next): SymfonyResponse
     {
         // Only apply authorization in production environment
-        if (!app()->environment('production')) {
+        if (! app()->environment('production')) {
             return $next($request);
         }
 
         // Check if SMS Dev is enabled
-        if (!config('sms-dev.enabled', false)) {
+        if (! config('sms-dev.enabled', false)) {
             abort(404);
         }
 
